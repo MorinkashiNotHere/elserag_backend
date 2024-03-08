@@ -19,7 +19,7 @@
 
 <?php
 
-require_once './DataBase.php';
+require_once '../DataBase.php';
 
 $db = Database::getConnection();
 

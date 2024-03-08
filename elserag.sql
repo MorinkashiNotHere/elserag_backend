@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 07, 2024 at 08:36 PM
+-- Generation Time: Mar 08, 2024 at 04:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,7 +59,8 @@ CREATE TABLE `caregiver` (
 --
 
 INSERT INTO `caregiver` (`user_id`, `password`, `learner_id`) VALUES
-(123, '$2y$10$/VpEKrJDXGA.n/N8xhcmNOCedupQY61nhGylGs.XDa2oWHJaREAs2', 123);
+(123, '$2y$10$/VpEKrJDXGA.n/N8xhcmNOCedupQY61nhGylGs.XDa2oWHJaREAs2', 123),
+(5555, '', 5555);
 
 -- --------------------------------------------------------
 
@@ -78,7 +79,7 @@ CREATE TABLE `care_edu` (
 
 INSERT INTO `care_edu` (`educator_id`, `caregiver_id`) VALUES
 (123, 123),
-(123, 123);
+(123, 5555);
 
 -- --------------------------------------------------------
 
@@ -87,9 +88,17 @@ INSERT INTO `care_edu` (`educator_id`, `caregiver_id`) VALUES
 --
 
 CREATE TABLE `cgroup` (
-  `Group ID` int(250) NOT NULL,
-  `Caregiver ID` int(250) NOT NULL
+  `group_id` int(250) NOT NULL,
+  `caregiver_id` int(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cgroup`
+--
+
+INSERT INTO `cgroup` (`group_id`, `caregiver_id`) VALUES
+(1, 123),
+(1, 5555);
 
 -- --------------------------------------------------------
 
@@ -108,7 +117,8 @@ CREATE TABLE `educator` (
 --
 
 INSERT INTO `educator` (`user_id`, `password`, `SubjectSpecialization`) VALUES
-(123, '$2y$10$qkX0daxzttOsu/GDUOj1J.j1/BgvaOQjOR82ecfRXEKj1R0MJMftK', 'arabic');
+(123, '$2y$10$qkX0daxzttOsu/GDUOj1J.j1/BgvaOQjOR82ecfRXEKj1R0MJMftK', 'العربية'),
+(1234, '', 'العربية');
 
 -- --------------------------------------------------------
 
@@ -149,10 +159,18 @@ CREATE TABLE `feedback` (
 --
 
 CREATE TABLE `group` (
-  `Group ID` int(250) NOT NULL,
-  `Educator ID` int(250) NOT NULL,
-  `Material ID` int(250) NOT NULL
+  `group_id` int(250) NOT NULL,
+  `educator_id` int(250) NOT NULL,
+  `material_id` int(250) NOT NULL,
+  `complete` varchar(10) DEFAULT 'no'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `group`
+--
+
+INSERT INTO `group` (`group_id`, `educator_id`, `material_id`, `complete`) VALUES
+(1, 123, 1, 'yes');
 
 -- --------------------------------------------------------
 
@@ -164,15 +182,21 @@ CREATE TABLE `learner` (
   `user_id` int(250) NOT NULL,
   `password` text NOT NULL,
   `points` int(250) NOT NULL,
-  `Cdays` int(250) NOT NULL
+  `Cdays` int(250) NOT NULL,
+  `Agroup` varchar(10) NOT NULL DEFAULT 'no',
+  `Egroup` varchar(10) NOT NULL DEFAULT 'no',
+  `Ngroup` varchar(10) NOT NULL DEFAULT 'no',
+  `Sgroup` varchar(10) NOT NULL DEFAULT 'no'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `learner`
 --
 
-INSERT INTO `learner` (`user_id`, `password`, `points`, `Cdays`) VALUES
-(123, '$2y$10$vrWD5GGQ/W5VdH7LikB2DOUMtIlWsUXifu/F093rc8Mkg9bJy5DOi', 222, 20);
+INSERT INTO `learner` (`user_id`, `password`, `points`, `Cdays`, `Agroup`, `Egroup`, `Ngroup`, `Sgroup`) VALUES
+(123, '$2y$10$vrWD5GGQ/W5VdH7LikB2DOUMtIlWsUXifu/F093rc8Mkg9bJy5DOi', 222, 20, 'yes', 'no', 'no', 'no'),
+(1234, '', 0, 0, 'yes', 'no', 'no', 'no'),
+(5555, '', 0, 0, 'yes', 'no', 'no', 'no');
 
 -- --------------------------------------------------------
 
@@ -212,9 +236,18 @@ INSERT INTO `lesson` (`lesson_id`, `lesson_name`, `content`, `course_id`) VALUES
 --
 
 CREATE TABLE `lgroup` (
-  `Group ID` int(250) NOT NULL,
-  `Learner ID` int(250) NOT NULL
+  `group_id` int(250) NOT NULL,
+  `learner_id` int(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `lgroup`
+--
+
+INSERT INTO `lgroup` (`group_id`, `learner_id`) VALUES
+(1, 123),
+(1, 1234),
+(1, 5555);
 
 -- --------------------------------------------------------
 
@@ -223,7 +256,7 @@ CREATE TABLE `lgroup` (
 --
 
 CREATE TABLE `material` (
-  `Material ID` int(250) NOT NULL,
+  `material_id` int(250) NOT NULL,
   `Title` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -231,22 +264,11 @@ CREATE TABLE `material` (
 -- Dumping data for table `material`
 --
 
-INSERT INTO `material` (`Material ID`, `Title`) VALUES
+INSERT INTO `material` (`material_id`, `Title`) VALUES
 (1, 'العربية'),
 (2, 'الإنجليزية'),
 (3, 'الأرقام'),
 (4, 'العلوم\r\n');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `material_ed`
---
-
-CREATE TABLE `material_ed` (
-  `Material ID` int(250) NOT NULL,
-  `Educator ID` int(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -287,14 +309,7 @@ CREATE TABLE `upload_material` (
 --
 
 INSERT INTO `upload_material` (`material_id`, `educator_id`, `group_id`, `filename`, `filesize`, `filetype`) VALUES
-(0, 0, 0, 'try.txt', 15, 'text/plain'),
-(0, 0, 0, 'try.txt', 15, 'text/plain'),
-(0, 0, 0, 'try.txt', 15, 'text/plain'),
-(0, 0, 0, 'try.txt', 15, 'text/plain'),
-(0, 0, 0, 'try.txt', 15, 'text/plain'),
-(0, 0, 0, 'try.txt', 15, 'text/plain'),
-(0, 0, 0, 'try.txt', 15, 'text/plain'),
-(0, 0, 0, 'try.txt', 15, 'text/plain');
+(1, 123, 1, 'Parallelism in sorting .docx', 15960, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 
 --
 -- Indexes for dumped tables
@@ -322,7 +337,7 @@ ALTER TABLE `feedback`
 -- Indexes for table `group`
 --
 ALTER TABLE `group`
-  ADD PRIMARY KEY (`Group ID`);
+  ADD PRIMARY KEY (`group_id`);
 
 --
 -- Indexes for table `learner`
@@ -340,7 +355,7 @@ ALTER TABLE `lesson`
 -- Indexes for table `material`
 --
 ALTER TABLE `material`
-  ADD PRIMARY KEY (`Material ID`);
+  ADD PRIMARY KEY (`material_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -356,7 +371,7 @@ ALTER TABLE `feedback`
 -- AUTO_INCREMENT for table `group`
 --
 ALTER TABLE `group`
-  MODIFY `Group ID` int(250) NOT NULL AUTO_INCREMENT;
+  MODIFY `group_id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `lesson`
@@ -368,7 +383,7 @@ ALTER TABLE `lesson`
 -- AUTO_INCREMENT for table `material`
 --
 ALTER TABLE `material`
-  MODIFY `Material ID` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `material_id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
