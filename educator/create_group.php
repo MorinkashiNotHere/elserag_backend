@@ -101,9 +101,12 @@ if (isset($_POST['create'])) {
             $stmt_learner = $db->prepare($sqlLearner);
             $stmt_learner->execute();
 
+            $learnerCount = 0; // Initialize learner count
+
             while ($row_learner = $stmt_learner->fetch(PDO::FETCH_ASSOC)) {
                 $learner_id = $row_learner[$columnName];
                 echo "Value from learner_id: $learner_id<br>";
+                $learnerCount++;
 
                 // Fetch caregiver_id from caregiver table based on learner_id
                 $caregiver_id = ''; // Initialize it before the query
@@ -155,14 +158,25 @@ if (isset($_POST['create'])) {
                 echo "Updated $group_column_name column in learner table to 'yes' successfully.<br>";
             }
 
-            // Update complete column in group table to 'yes'
-            $sqlUpdateComplete = "UPDATE `group` SET complete = 'yes' WHERE group_id = :group_id";
-            $stmtUpdateComplete = $db->prepare($sqlUpdateComplete);
-            $stmtUpdateComplete->bindParam(':group_id', $group_id, PDO::PARAM_INT);
-            $stmtUpdateComplete->execute();
+            if ($learnerCount > 0) {
+                // Update complete column in group table to 'yes'
+                $sqlUpdateComplete = "UPDATE `group` SET complete = 'yes' WHERE group_id = :group_id";
+                $stmtUpdateComplete = $db->prepare($sqlUpdateComplete);
+                $stmtUpdateComplete->bindParam(':group_id', $group_id, PDO::PARAM_INT);
+                $stmtUpdateComplete->execute();
 
-            echo "Updated complete column in group table to 'yes' successfully.<br>";
+                echo "Updated complete column in group table to 'yes' successfully.<br>";
+            } else {
+                // No learners found, delete the group row
+                $sqlDeleteGroup = "DELETE FROM `group` WHERE group_id = :group_id";
+                $stmtDeleteGroup = $db->prepare($sqlDeleteGroup);
+                $stmtDeleteGroup->bindParam(':group_id', $group_id, PDO::PARAM_INT);
+                $stmtDeleteGroup->execute();
+
+                echo "No learners found. Deleted the group row.<br>";
+            }
         }
     }
 }
 ?>
+
