@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 08, 2024 at 04:29 AM
+-- Generation Time: Mar 09, 2024 at 08:05 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -301,15 +301,10 @@ CREATE TABLE `upload_material` (
   `group_id` int(250) NOT NULL,
   `filename` varchar(200) NOT NULL,
   `filesize` int(11) NOT NULL,
-  `filetype` varchar(100) NOT NULL
+  `filetype` varchar(100) NOT NULL,
+  `date` datetime NOT NULL,
+  `file_subject` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `upload_material`
---
-
-INSERT INTO `upload_material` (`material_id`, `educator_id`, `group_id`, `filename`, `filesize`, `filetype`) VALUES
-(1, 123, 1, 'Parallelism in sorting .docx', 15960, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 
 --
 -- Indexes for dumped tables
@@ -371,7 +366,7 @@ ALTER TABLE `feedback`
 -- AUTO_INCREMENT for table `group`
 --
 ALTER TABLE `group`
-  MODIFY `group_id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `group_id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `lesson`

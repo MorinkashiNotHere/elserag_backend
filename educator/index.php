@@ -14,7 +14,13 @@ echo "<input type='file' name='file' id='file'>";
 echo "<input type='hidden' name='educator_id' value='$user_id'>";
 echo "<input type='hidden' name='material_id' value='$material_id'>";
 echo "<input type='hidden' name='group_id' value='$group_id'>";
-			
+
+echo " <select id='file_subject' name='file_subject'>
+            <option value='Exam'>Exam</option>
+            <option value='exercise'>exercise</option>
+            <option value='learning'>learning</option>
+        </select> "	;	
+
 echo "<button type='submit'>Upload file</button>";
 
 echo "</form>";

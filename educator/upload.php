@@ -1,8 +1,10 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
     $educator_id = $_POST['educator_id'];
     $material_id = $_POST['material_id'];
     $group_id = $_POST['group_id'];
+    $file_subject = $_POST['file_subject'];
 
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
         $target_dir = "uploads/";
@@ -19,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $filename = $_FILES["file"]["name"];
                 $filesize = $_FILES["file"]["size"];
                 $filetype = $_FILES["file"]["type"];
+                $upload_date = date("Y-m-d H:i:s"); // Current date and time
 
                 $db_host = "localhost";
                 $db_user = "root";
@@ -31,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     die("Connection failed: " . $conn->connect_error);
                 }
 
-                $sql = "INSERT INTO upload_material (filename, filesize, filetype, educator_id, material_id, group_id) VALUES ('$filename', $filesize, '$filetype', $educator_id, $material_id, $group_id)";
+                $sql = "INSERT INTO upload_material (filename, filesize, filetype, educator_id, material_id, group_id, file_subject, date) VALUES ('$filename', $filesize, '$filetype', $educator_id, $material_id, $group_id, '$file_subject', '$upload_date')";
 
                 if ($conn->query($sql) === TRUE) {
                     echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded, and the information has been stored in the database.";
