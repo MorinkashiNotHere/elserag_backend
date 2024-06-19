@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2024 at 08:05 PM
+-- Generation Time: Jun 19, 2024 at 11:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -292,6 +292,31 @@ INSERT INTO `nprogress` (`learner_id`, `lesson_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `recordings`
+--
+
+CREATE TABLE `recordings` (
+  `id` int(11) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `user` varchar(50) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `recordings`
+--
+
+INSERT INTO `recordings` (`id`, `filename`, `user`, `timestamp`) VALUES
+(1, 'sarah_recording_1.wav', 'sarah', '2024-06-19 00:14:20'),
+(2, 'sarah_recording_2.wav', 'sarah', '2024-06-19 00:14:44'),
+(3, 'sarah_recording_3.wav', 'sarah', '2024-06-19 00:14:59'),
+(4, 'nada_recording_1.wav', 'nada', '2024-06-19 00:16:19'),
+(5, 'nada_recording_2.wav', 'nada', '2024-06-19 00:16:35'),
+(6, 'nada_recording_3.wav', 'nada', '2024-06-19 00:16:56');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `upload_material`
 --
 
@@ -353,6 +378,12 @@ ALTER TABLE `material`
   ADD PRIMARY KEY (`material_id`);
 
 --
+-- Indexes for table `recordings`
+--
+ALTER TABLE `recordings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -379,6 +410,12 @@ ALTER TABLE `lesson`
 --
 ALTER TABLE `material`
   MODIFY `material_id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `recordings`
+--
+ALTER TABLE `recordings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
