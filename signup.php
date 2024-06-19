@@ -1,6 +1,7 @@
 <?php
 
 require_once './DataBase.php';
+require_once './validate.php';
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -22,11 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($role == "caregiver") {
             $learner_id = $data->learner_id;
                         
-            if (isUseridExist($learner_id,"learner") == false) {
+            if (isUseridExist($learner_id, "learner") == false) {
                 echo json_encode([
                     "message" => "Learner doesn't exists"
                 ]);
-
                 exit();
             }
         }
@@ -69,9 +69,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             if ($isSuccess) {
+                // Generate token
+                $token = bin2hex(random_bytes(16));
+                // Store token in the database
+                $tokenQuery = "INSERT INTO user_tokens (user_id, token) VALUES (:user_id, :token)";
+                $tokenStmt = $db->prepare($tokenQuery);
+                $tokenStmt->execute([
+                    'user_id' => $user_id,
+                    'token' => $token
+                ]);
+
+                // Set token as a cookie
+                setcookie('auth_token', $token, time() + (86400 * 30), "/"); // Cookie valid for 30 days
+
                 $response = [
                     "status" => "success",
-                    "message" => "User has been created successfully"
+                    "message" => "User has been created successfully",
+                    "token" => $token
                 ];
             } else {
                 $response = [
@@ -101,4 +115,6 @@ function isUseridExist($user_id, $role)
 
     return $statement->fetch() !== false;
 }
+
+
 ?>
